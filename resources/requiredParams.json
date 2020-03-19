@@ -1,0 +1,16 @@
+{
+	"Defaults": {
+		"SignatureMethod": "HmacSHA256",
+		"SignatureVersion": 2,
+		"Timestamp": "",
+		"AWSAccessKeyId": "",
+		"SellerId": "",
+		"Action": ""
+	},
+	"Reports": {
+		"version": "2009-01-01"
+	},
+	"Orders": {
+		"version": "2013-09-01"
+	}
+}
