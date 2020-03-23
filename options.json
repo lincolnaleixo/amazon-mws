@@ -1,0 +1,9 @@
+{
+	"clientSecretPath": "",
+	"gdriveTokenPath": "",
+	"spreadsheetId": "",
+	"sheetId": "",
+	"cacheMinutes": 5,
+	"asin": "",
+	"dumpFolder": ""
+}
