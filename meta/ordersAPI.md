@@ -1,10 +1,10 @@
 # Orders API
 
-## *Orders Functions*
+## *Functions*
 
 - [x] ListOrders
-- [ ] ListOrdersByNextToken
-- [ ] GetOrder
-- [ ] ListOrderItems
-- [ ] ListOrderItemsByNextToken
-- [ ] GetServiceStatus
+- [x] ListOrdersByNextToken
+- [x] GetOrder
+- [x] ListOrderItems
+- [x] ListOrderItemsByNextToken
+- [x] GetServiceStatus

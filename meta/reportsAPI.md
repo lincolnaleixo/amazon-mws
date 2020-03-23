@@ -1,6 +1,6 @@
 # Reports API
 
-## *Reports Functions*
+## *Functions*
 
 - [x] RequestReport
 - [x] GetReportRequestList

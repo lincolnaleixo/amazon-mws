@@ -1,6 +1,6 @@
 # Products API
 
-## *Products Functions*
+## *Functions*
 
 - [ ] ListMatchingProducts
 - [x] GetMatchingProduct
