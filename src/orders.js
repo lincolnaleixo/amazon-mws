@@ -1,6 +1,4 @@
 /* eslint-disable max-lines-per-function */
-const xml2js = require('xml2js')
-const fetch = require('node-fetch')
 const Core = require('./core')
 // TODO jsdoc de todos os metodos
 
@@ -19,20 +17,18 @@ class Orders {
 	async listOrders(startDate, endDate) {
 
 		// TODO add other parameters options
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
 
-		let jsonResponse = {}
-
-		const action = 'ListOrders'
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
 		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
 
-		const params = {
-			CreatedAfter: '2020-03-11T23:00:00',
-			CreatedBefore: '2020-03-17T23:00:00',
-			'MarketplaceId.Id.1': this.credentials.marketplaceId,
-		}
+		const params = { 'MarketplaceId.Id.1': this.credentials.marketplaceId }
 
-		if (startDate) params.StartDate = startDate
-		if (endDate) params.EndDate = endDate
+		if (startDate) params.CreatedAfter = startDate
+		if (endDate) params.CreatedBefore = endDate
 
 		const paramEntries = Object.entries({
 			...requiredParams, ...params,
@@ -50,30 +46,177 @@ class Orders {
 
 		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
 
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: this.headers,
+		const response = await this.core.requestMws(url, this.headers)
+
+		return response[attrName]
+
+	}
+
+	async listOrdersByNextToken(nextToken) {
+
+		// TODO add other parameters options
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
+
+		const params = { NextToken: nextToken }
+
+		const paramEntries = Object.entries({
+			...requiredParams, ...params,
 		})
 
-		const xml = await response.text()
-		const xmlParser = new xml2js.Parser({
-			mergeAttrs: true,
-			explicitArray: false,
-			emptyTag: {},
-			charkey: 'Value',
+		const urlParams = new URLSearchParams(paramEntries)
+		urlParams.sort()
+
+		const signature = this.core
+			.signString(urlParams,
+				this.api,
+				requiredParams.Version,
+				this.credentials.secretAccessKey)
+		urlParams.append('Signature', signature)
+
+		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+
+		const response = await this.core.requestMws(url, this.headers)
+
+		return response[attrName]
+
+	}
+
+	async getOrder(amazonOrderId) {
+
+		// TODO colocar amazonorderid as list
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
+
+		const params = { 'AmazonOrderId.Id.1': amazonOrderId }
+
+		const paramEntries = Object.entries({
+			...requiredParams, ...params,
 		})
-		jsonResponse = await xmlParser.parseStringPromise(xml /* , options */)
 
-		const orders = jsonResponse.ListOrdersResponse.ListOrdersResult.Orders.Order
-		// console.log(JSON.stringify(orders, null, 2))
+		const urlParams = new URLSearchParams(paramEntries)
+		urlParams.sort()
 
-		if (jsonResponse.ErrorResponse && jsonResponse.ErrorResponse.Error.Code === 'InvalidReportType') {
+		const signature = this.core
+			.signString(urlParams,
+				this.api,
+				requiredParams.Version,
+				this.credentials.secretAccessKey)
+		urlParams.append('Signature', signature)
 
-			throw new Error(jsonResponse.ErrorResponse.Error.Message)
+		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
 
-		}
+		const response = await this.core.requestMws(url, this.headers)
 
-		return orders
+		return response[attrName]
+
+	}
+
+	async listOrderItems(amazonOrderId) {
+
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
+
+		const params = { AmazonOrderId: amazonOrderId }
+
+		const paramEntries = Object.entries({
+			...requiredParams, ...params,
+		})
+
+		const urlParams = new URLSearchParams(paramEntries)
+		urlParams.sort()
+
+		const signature = this.core
+			.signString(urlParams,
+				this.api,
+				requiredParams.Version,
+				this.credentials.secretAccessKey)
+		urlParams.append('Signature', signature)
+
+		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+
+		const response = await this.core.requestMws(url, this.headers)
+
+		return response[attrName]
+
+	}
+
+	async listOrderItemsByNextToken(nextToken) {
+
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
+
+		const params = { NextToken: nextToken }
+
+		const paramEntries = Object.entries({
+			...requiredParams, ...params,
+		})
+
+		const urlParams = new URLSearchParams(paramEntries)
+		urlParams.sort()
+
+		const signature = this.core
+			.signString(urlParams,
+				this.api,
+				requiredParams.Version,
+				this.credentials.secretAccessKey)
+		urlParams.append('Signature', signature)
+
+		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+
+		const response = await this.core.requestMws(url, this.headers)
+
+		return response[attrName]
+
+	}
+
+	async getServiceStatus() {
+
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
+
+		// const paramEntries = Object.entries({ ...requiredParams })
+
+		const urlParams = new URLSearchParams(requiredParams)
+		urlParams.sort()
+
+		const signature = this.core
+			.signString(urlParams,
+				this.api,
+				requiredParams.Version,
+				this.credentials.secretAccessKey)
+		urlParams.append('Signature', signature)
+
+		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+
+		const response = await this.core.requestMws(url, this.headers)
+
+		return response[attrName]
 
 	}
 

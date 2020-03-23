@@ -6,14 +6,14 @@
 - [x] GetMatchingProduct
 - [ ] GetMatchingProductForId
 - [ ] GetCompetitivePricingForSKU
-- [ ] GetCompetitivePricingForASIN
+- [x] GetCompetitivePricingForASIN
 - [ ] GetLowestOfferListingsForSKU
-- [ ] GetLowestOfferListingsForASIN
+- [x] GetLowestOfferListingsForASIN
 - [ ] GetLowestPricedOffersForSKU
-- [ ] GetLowestPricedOffersForASIN
+- [x] GetLowestPricedOffersForASIN
 - [ ] GetMyFeesEstimate
 - [ ] GetMyPriceForSKU
-- [ ] GetMyPriceForASIN
+- [x] GetMyPriceForASIN
 - [ ] GetProductCategoriesForSKU
-- [ ] GetProductCategoriesForASIN
+- [x] GetProductCategoriesForASIN
 - [ ] GetServiceStatus

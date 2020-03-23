@@ -4,17 +4,17 @@
 
 - [x] RequestReport
 - [x] GetReportRequestList
-- [ ] GetReportRequestListByNextToken
+- [x] GetReportRequestListByNextToken
 - [ ] GetReportRequestCount
 - [ ] CancelReportRequests
-- [ ] GetReportList
+- [x] GetReportList
 - [ ] GetReportListByNextToken
-- [ ] GetReportCount
+- [x] GetReportCount
 - [x] GetReport
 - [ ] ManageReportSchedule
-- [ ] GetReportScheduleList
+- [x] GetReportScheduleList
 - [ ] GetReportScheduleListByNextToken
-- [ ] GetReportScheduleCount
+- [x] GetReportScheduleCount
 - [ ] UpdateReportAcknowledgements
 
 ## *Reports Types*
@@ -38,10 +38,10 @@
 
 ### **Order Reports**
 
-- [ ] Unshipped Orders Report
+- [ ] Unshipped Orders Report *still needs ManageReportSchedule
 - [ ] Scheduled XML Order Report
-- [ ] Requested or Scheduled Flat File Order Report
-- [ ] Flat File Order Report
+- [ ] Requested or Scheduled Flat File Order Report *still needs ManageReportSchedule
+- [ ] Flat File Order Report *still needs ManageReportSchedule
 
 ### **Order Tracking Reports**
 
