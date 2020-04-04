@@ -3,6 +3,7 @@
 const Configurati = require('configurati')
 const fs = require('fs')
 const jsonfile = require('jsonfile')
+const moment = require('moment-timezone')
 const Logger = require('../lib/logger')
 const Orders = require('../src/orders.js')
 
@@ -52,6 +53,17 @@ async function listOrders() {
 	try {
 
 		const response = await orders.listOrders(startDate, endDate)
+		const ordersResponse = response[attrName].Orders.Order
+		for (let i = 0; i < ordersResponse.length; i += 1) {
+
+			const dateUTC = ordersResponse[i].PurchaseDate
+			const dateLA = moment(dateUTC)
+				.tz('America/Los_Angeles')
+				.format('YYYY-MM-DDTHH:mm:ss.SSS')
+
+			ordersResponse[i].PurchaseDate = dateLA
+
+		}
 		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
 
 	} catch (err) {
@@ -219,11 +231,11 @@ async function getServiceStatus() {
 async function testAllFunctions() {
 
 	await listOrders()
-	await listOrdersByNextToken()
-	await getOrder()
-	await listOrderItems()
+	// await listOrdersByNextToken()
+	// await getOrder()
+	// await listOrderItems()
 	// await listOrderItemsByNextToken() // can't test it because couldn't find listorderitems nextToken
-	await getServiceStatus()
+	// await getServiceStatus()
 
 }
 

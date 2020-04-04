@@ -1,7 +1,6 @@
-/* eslint-disable max-lines-per-function */
-const fetch = require('node-fetch')
-const xml2js = require('xml2js')
 const Core = require('./core')
+const Logger = require('../lib/logger')
+const requiredParams = require('../resources/requiredParams.json')
 
 // TODO jsdoc de todos os metodos
 
@@ -9,11 +8,16 @@ class Products {
 
 	constructor(credentials) {
 
+		const className = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('new')[1].split('(')[0].trim()
+		this.api = className
+
 		this.core = new Core()
-		this.api = 'Products'
+		this.logger = new Logger(this.api)
+
 		this.credentials = credentials
-		this.endpoint = 'https://mws.amazonservices.com/'
-		this.headers = { 'Content-Type': 'text/xml' }
+		this.headers = requiredParams[this.api].headers
 
 	}
 
@@ -28,30 +32,20 @@ class Products {
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
 
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
-
 		const params = {
 			MarketplaceId: marketplaceId,
 			'ASINList.ASIN.1': asin,
 		}
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
-
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
-
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
-
-		const response = await this.core.requestMws(url, this.headers)
+		const response = await this.core.requestMws(requestInfo)
 
 		return response[attrName]
 
@@ -67,30 +61,49 @@ class Products {
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
 
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
-
 		const params = {
 			MarketplaceId: marketplaceId,
 			'ASINList.ASIN.1': asin,
 		}
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
+		const response = await this.core.requestMws(requestInfo)
 
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
+		return response[attrName]
 
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+	}
 
-		const response = await this.core.requestMws(url, this.headers)
+	async getCompetitivePricingForSKU(marketplaceId, sku) {
+
+		// TODO mudar para SKULIST
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+
+		const params = {
+			MarketplaceId: marketplaceId,
+			'SellerSKUList.SellerSKU.1': sku,
+		}
+
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
+
+		const response = await this.core.requestMws(requestInfo)
 
 		return response[attrName]
 
@@ -106,30 +119,49 @@ class Products {
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
 
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
-
 		const params = {
 			MarketplaceId: marketplaceId,
 			'ASINList.ASIN.1': asin,
 		}
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
+		const response = await this.core.requestMws(requestInfo)
 
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
+		return response[attrName]
 
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+	}
 
-		const response = await this.core.requestMws(url, this.headers)
+	async getLowestOfferListingsForSKU(marketplaceId, sku) {
+
+		// TODO adicionar todos os parametros
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+
+		const params = {
+			MarketplaceId: marketplaceId,
+			'SellerSKUList.SellerSKU.1': sku,
+		}
+
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
+
+		const response = await this.core.requestMws(requestInfo)
 
 		return response[attrName]
 
@@ -144,51 +176,53 @@ class Products {
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
 
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
-
 		const params = {
 			MarketplaceId: marketplaceId,
 			ASIN: asin,
 			ItemCondition: itemCondition,
 		}
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
+		const response = await this.core.requestMws(requestInfo)
 
-		// TODO ver uma forma de passar esse metodo para o core. Esse é unico que precisa passar os parametros via post data
+		return response[attrName]
 
-		// const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+	}
 
-		// const response = await this.core.requestMws(url, this.headers)
+	async getLowestPricedOffersForSKU(marketplaceId, sku, itemCondition) {
 
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}`
+		// TODO adicionar todos os parametros
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
 
-		const response = await fetch(url, {
-			method: 'POST',
-			body: urlParams,
-		})
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
 
-		const responseText = await response.text()
-		const xmlParser = new xml2js.Parser({
-			mergeAttrs: true,
-			explicitArray: false,
-			emptyTag: {},
-			charkey: 'Value',
-		})
+		const params = {
+			MarketplaceId: marketplaceId,
+			SellerSKU: sku,
+			ItemCondition: itemCondition,
+		}
 
-		const jsonResponse = await xmlParser.parseStringPromise(responseText)
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		return jsonResponse[attrName]
+		const response = await this.core.requestMws(requestInfo)
+
+		return response[attrName]
 
 	}
 
@@ -202,30 +236,20 @@ class Products {
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
 
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
-
 		const params = {
 			MarketplaceId: marketplaceId,
 			'ASINList.ASIN.1': asin,
 		}
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
-
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
-
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
-
-		const response = await this.core.requestMws(url, this.headers)
+		const response = await this.core.requestMws(requestInfo)
 
 		return response[attrName]
 
@@ -241,30 +265,20 @@ class Products {
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
 
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
-
 		const params = {
 			MarketplaceId: marketplaceId,
 			ASIN: asin,
 		}
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
-
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
-
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
-
-		const response = await this.core.requestMws(url, this.headers)
+		const response = await this.core.requestMws(requestInfo)
 
 		return response[attrName]
 

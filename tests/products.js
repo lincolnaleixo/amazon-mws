@@ -103,6 +103,39 @@ async function getCompetitivePricingForASIN() {
 
 }
 
+async function getCompetitivePricingForSKU() {
+
+	const logger = new Logger(feature)
+	this.logger = logger.get()
+
+	const fnName = ((((new Error().stack.split('at ') || [])[1] || '')
+		.match(/(^|\.| <| )(.*[^(<])( \()/) || [])[2] || '')
+		.split('.')
+		.pop()
+
+	const action = fnName[0].toUpperCase() + fnName.slice(1)
+	const attrName = `${action}Result`
+
+	const credentials = await getCredentials()
+
+	const products = new Products(credentials)
+	const dumpFolder = `${options.dumpFolder}/${feature}`
+
+	const { sku } = options
+
+	try {
+
+		const response = await products[fnName](credentials.marketplaceId, sku)
+		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
+
+	} catch (err) {
+
+		this.logger.info(err.stack)
+
+	}
+
+}
+
 async function getLowestOfferListingsForASIN() {
 
 	const logger = new Logger(feature)
@@ -135,6 +168,39 @@ async function getLowestOfferListingsForASIN() {
 		this.logger.info(err.stack)
 
 		// fs.writeFileSync(`${dumpFolder}/${dumpFile}.json`, err.message)
+
+	}
+
+}
+
+async function getLowestOfferListingsForSKU() {
+
+	const logger = new Logger(feature)
+	this.logger = logger.get()
+
+	const fnName = ((((new Error().stack.split('at ') || [])[1] || '')
+		.match(/(^|\.| <| )(.*[^(<])( \()/) || [])[2] || '')
+		.split('.')
+		.pop()
+
+	const action = fnName[0].toUpperCase() + fnName.slice(1)
+	const attrName = `${action}Result`
+
+	const credentials = await getCredentials()
+
+	const products = new Products(credentials)
+	const dumpFolder = `${options.dumpFolder}/${feature}`
+
+	const { sku } = options
+
+	try {
+
+		const response = await products[fnName](credentials.marketplaceId, sku)
+		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
+
+	} catch (err) {
+
+		this.logger.info(err.stack)
 
 	}
 
@@ -175,6 +241,42 @@ async function getLowestPricedOffersForASIN() {
 		this.logger.info(err.stack)
 
 		// fs.writeFileSync(`${dumpFolder}/${dumpFile}.json`, err.message)
+
+	}
+
+}
+
+async function getLowestPricedOffersForSKU() {
+
+	const logger = new Logger(feature)
+	this.logger = logger.get()
+
+	const fnName = ((((new Error().stack.split('at ') || [])[1] || '')
+		.match(/(^|\.| <| )(.*[^(<])( \()/) || [])[2] || '')
+		.split('.')
+		.pop()
+
+	const action = fnName[0].toUpperCase() + fnName.slice(1)
+	const attrName = `${action}Result`
+
+	const credentials = await getCredentials()
+
+	const products = new Products(credentials)
+	const dumpFolder = `${options.dumpFolder}/${feature}`
+
+	const { marketplaceId } = credentials
+	const {
+		sku, itemCondition,
+	} = options
+
+	try {
+
+		const response = await products[fnName](credentials.marketplaceId, sku, itemCondition)
+		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
+
+	} catch (err) {
+
+		this.logger.info(err.stack)
 
 	}
 
@@ -264,8 +366,11 @@ async function testAllFunctions() {
 
 	await getMatchingProduct()
 	await getCompetitivePricingForASIN()
+	await getCompetitivePricingForSKU()
 	await getLowestOfferListingsForASIN()
+	await getLowestOfferListingsForSKU()
 	await getLowestPricedOffersForASIN()
+	await getLowestPricedOffersForSKU()
 	await getMyPriceForASIN()
 	await getProductCategoriesForASIN()
 

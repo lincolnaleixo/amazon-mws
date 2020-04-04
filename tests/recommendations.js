@@ -4,11 +4,11 @@ const Configurati = require('configurati')
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 const Logger = require('../lib/logger')
-const Finances = require('../src/finances.js')
+const Recommendations = require('../src/recommendations.js')
 
 const options = jsonfile.readFileSync('./options.json')
-// eslint-disable-next-line complexity
-const feature = 'finances'
+
+const feature = 'recommendations'
 
 async function getCredentials() {
 
@@ -29,7 +29,7 @@ async function getCredentials() {
 
 }
 
-async function listFinancialEvents() {
+async function getLastUpdatedTimeForRecommendations() {
 
 	const logger = new Logger(feature)
 	this.logger = logger.get()
@@ -41,15 +41,16 @@ async function listFinancialEvents() {
 
 	const action = fnName[0].toUpperCase() + fnName.slice(1)
 	const attrName = `${action}Result`
+
 	const credentials = await getCredentials()
 
-	const finances = new Finances(credentials)
+	const recommendations = new Recommendations(credentials)
 	const dumpFolder = `${options.dumpFolder}/${feature}`
 
 	try {
 
-		const { orderId } = options
-		const response = await finances.listFinancialEvents(orderId)
+		const response = await recommendations[fnName](credentials.marketplaceId)
+		if (!fs.existsSync(dumpFolder)) fs.mkdirSync(dumpFolder)
 		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
 
 	} catch (err) {
@@ -60,7 +61,7 @@ async function listFinancialEvents() {
 
 }
 
-async function listFinancialEventsByNextToken() {
+async function listRecommendations() {
 
 	const logger = new Logger(feature)
 	this.logger = logger.get()
@@ -72,15 +73,16 @@ async function listFinancialEventsByNextToken() {
 
 	const action = fnName[0].toUpperCase() + fnName.slice(1)
 	const attrName = `${action}Result`
+
 	const credentials = await getCredentials()
 
-	const finances = new Finances(credentials)
+	const recommendations = new Recommendations(credentials)
 	const dumpFolder = `${options.dumpFolder}/${feature}`
 
 	try {
 
-		const { listFinancialEventsNextToken } = options
-		const response = await finances[fnName](listFinancialEventsNextToken)
+		const response = await recommendations[fnName](credentials.marketplaceId)
+		if (!fs.existsSync(dumpFolder)) fs.mkdirSync(dumpFolder)
 		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
 
 	} catch (err) {
@@ -91,7 +93,7 @@ async function listFinancialEventsByNextToken() {
 
 }
 
-async function listFinancialEventGroups() {
+async function listRecommendationsByNextToken() {
 
 	const logger = new Logger(feature)
 	this.logger = logger.get()
@@ -103,46 +105,16 @@ async function listFinancialEventGroups() {
 
 	const action = fnName[0].toUpperCase() + fnName.slice(1)
 	const attrName = `${action}Result`
+
 	const credentials = await getCredentials()
 
-	const finances = new Finances(credentials)
+	const recommendations = new Recommendations(credentials)
 	const dumpFolder = `${options.dumpFolder}/${feature}`
 
 	try {
 
-		const { financialEventsStartDate } = options
-		const response = await finances[fnName](financialEventsStartDate)
-		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
-
-	} catch (err) {
-
-		this.logger.info(err.stack)
-
-	}
-
-}
-
-async function listFinancialEventGroupsByNextToken() {
-
-	const logger = new Logger(feature)
-	this.logger = logger.get()
-
-	const fnName = ((((new Error().stack.split('at ') || [])[1] || '')
-		.match(/(^|\.| <| )(.*[^(<])( \()/) || [])[2] || '')
-		.split('.')
-		.pop()
-
-	const action = fnName[0].toUpperCase() + fnName.slice(1)
-	const attrName = `${action}Result`
-	const credentials = await getCredentials()
-
-	const finances = new Finances(credentials)
-	const dumpFolder = `${options.dumpFolder}/${feature}`
-
-	try {
-
-		const { financialEventsGroupNextToken } = options
-		const response = await finances[fnName](financialEventsGroupNextToken)
+		const response = await recommendations[fnName](credentials.marketplaceId)
+		if (!fs.existsSync(dumpFolder)) fs.mkdirSync(dumpFolder)
 		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
 
 	} catch (err) {
@@ -165,14 +137,16 @@ async function getServiceStatus() {
 
 	const action = fnName[0].toUpperCase() + fnName.slice(1)
 	const attrName = `${action}Result`
+
 	const credentials = await getCredentials()
 
-	const finances = new Finances(credentials)
+	const recommendations = new Recommendations(credentials)
 	const dumpFolder = `${options.dumpFolder}/${feature}`
 
 	try {
 
-		const response = await finances[fnName]()
+		const response = await recommendations[fnName]()
+		if (!fs.existsSync(dumpFolder)) fs.mkdirSync(dumpFolder)
 		fs.writeFileSync(`${dumpFolder}/${fnName}.json`, JSON.stringify(response[attrName], null, 2))
 
 	} catch (err) {
@@ -185,10 +159,9 @@ async function getServiceStatus() {
 
 async function testAllFunctions() {
 
-	await listFinancialEvents()
-	await listFinancialEventsByNextToken()
-	await listFinancialEventGroups()
-	await listFinancialEventGroupsByNextToken()
+	await getLastUpdatedTimeForRecommendations()
+	await listRecommendations()
+	// await listRecommendationsByNextToken() //no next token to try yet
 	await getServiceStatus()
 
 }

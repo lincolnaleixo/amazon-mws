@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 const Core = require('./core')
 // TODO jsdoc de todos os metodos
 
@@ -24,27 +23,118 @@ class Finances {
 
 		const action = fnName[0].toUpperCase() + fnName.slice(1)
 		const attrName = `${action}Response`
-		const requiredParams = this.core.getRequiredParams(action, this.api, this.credentials)
 
 		const params = { AmazonOrderId: amazonOrderId }
 
-		const paramEntries = Object.entries({
-			...requiredParams, ...params,
-		})
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
 
-		const urlParams = new URLSearchParams(paramEntries)
-		urlParams.sort()
+		const response = await this.core.requestMws(requestInfo)
 
-		const signature = this.core
-			.signString(urlParams,
-				this.api,
-				requiredParams.Version,
-				this.credentials.secretAccessKey)
-		urlParams.append('Signature', signature)
+		return response[attrName]
 
-		const url = `${this.endpoint}${this.api}/${requiredParams.Version}?${urlParams}`
+	}
 
-		const response = await this.core.requestMws(url, this.headers)
+	async listFinancialEventsByNextToken(nextToken) {
+
+		// TODO add all parameters
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+
+		const params = { NextToken: nextToken }
+
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
+
+		const response = await this.core.requestMws(requestInfo)
+
+		return response[attrName]
+
+	}
+
+	async listFinancialEventGroups(startDate) {
+
+		// TODO add all parameters
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+
+		const params = { FinancialEventGroupStartedAfter: startDate }
+
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
+
+		const response = await this.core.requestMws(requestInfo)
+
+		return response[attrName]
+
+	}
+
+	async listFinancialEventGroupsByNextToken(nextToken) {
+
+		// TODO add all parameters
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+
+		const params = { NextToken: nextToken }
+
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+			params,
+		}
+
+		const response = await this.core.requestMws(requestInfo)
+
+		return response[attrName]
+
+	}
+
+	async getServiceStatus() {
+
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[1].split('.')[1].split('(')[0].trim()
+
+		const action = fnName[0].toUpperCase() + fnName.slice(1)
+		const attrName = `${action}Response`
+
+		const requestInfo = {
+			action,
+			api: this.api,
+			credentials: this.credentials,
+			headers: this.headers,
+		}
+
+		const response = await this.core.requestMws(requestInfo)
 
 		return response[attrName]
 
