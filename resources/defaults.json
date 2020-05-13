@@ -1,6 +1,0 @@
-{
-	"specialRequests": [
-		"GetLowestPricedOffersForASIN",
-		"GetLowestPricedOffersForSKU"
-	]
-}
