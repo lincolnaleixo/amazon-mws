@@ -1,0 +1,67 @@
+{
+	"Defaults": {
+		"SignatureMethod": "HmacSHA256",
+		"SignatureVersion": 2,
+		"Timestamp": "",
+		"AWSAccessKeyId": "",
+		"SellerId": "",
+		"Action": ""
+	},
+	"EasyShip": {
+		"version": "2018-09-01"
+	},
+	"Feeds": {
+		"version": "2009-01-01"
+	},
+	"Finances": {
+		"version": "2015-05-01"
+	},
+	"FulfillmentInboundShipment": {
+		"version": "2010-10-01"
+	},
+	"FulfillmentInventory": {
+		"version": "2010-10-01"
+	},
+	"FulfillmentOutboundShipment": {
+		"version": "2010-10-01"
+	},
+	"MerchantFulfillment": {
+		"version": "2015-06-01"
+	},
+	"Orders": {
+		"version": "2013-09-01"
+	},
+	"Products": {
+		"version": "2011-10-01",
+		"headers": {
+			"Content-Type": "text/xml"
+		}
+	},
+	"Recommendations": {
+		"version": "2013-04-01",
+		"headers": {
+			"Content-Type": "text/xml"
+		}
+	},
+	"Reports": {
+		"version": "2009-01-01",
+		"headers": {
+			"Content-Type": "text/xml"
+		}
+	},
+	"Sellers": {
+		"version": "2011-07-01",
+		"headers": {
+			"Content-Type": "text/xml"
+		}
+	},
+	"ShipmentInvoicing": {
+		"version": "2018-11-01"
+	},
+	"Subscriptions": {
+		"version": "2013-07-01",
+		"headers": {
+			"Content-Type": "text/xml"
+		}
+	}
+}

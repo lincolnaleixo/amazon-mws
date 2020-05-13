@@ -1,0 +1,53 @@
+module.exports = {
+	defaults: [
+		'string',
+		'array:string',
+		'decimal',
+		'boolean',
+		'int',
+	],
+	customs: {
+		FeesEstimateRequest: {
+			MarketplaceId: 'string',
+			IdType: 'string',
+			IdValue: 'string',
+			PriceToEstimateFees: 'PriceToEstimateFees',
+			Identifier: 'string',
+			IsAmazonFulfilled: 'boolean',
+		},
+		PriceToEstimateFees: {
+			ListingPrice: 'MoneyType',
+			Shipping: 'MoneyType',
+			Points: 'Points',
+		},
+		MoneyType: {
+			Amount: 'decimal',
+			CurrencyCode: 'CurrencyCode',
+		},
+		CurrencyCode: [
+			'USD',
+			'EUR',
+			'GBP',
+			'RMB',
+			'INR',
+			'JPY',
+			'CAD',
+			'MXN',
+		],
+		Points: {
+			PointsNumber: 'int',
+			PointsMonetaryValue: 'MoneyType',
+		},
+	},
+	MarketplaceId: 'string',
+	Query: 'string',
+	QueryContextId: 'string',
+	ASINList: 'array:string',
+	IdType: 'string',
+	IdList: 'array:string',
+	SellerSKUList: 'array:string',
+	ItemCondition: 'string',
+	SellerSKU: 'string',
+	ASIN: 'string',
+	FeesEstimateRequestList: 'object:FeesEstimateRequest',
+}

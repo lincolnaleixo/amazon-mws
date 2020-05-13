@@ -1,0 +1,76 @@
+module.exports = {
+	Products: {
+		Operations: [
+			{ ListMatchingProducts: [
+				'MarketplaceId',
+				'Query',
+				'QueryContextId',
+			] },
+			{ GetMatchingProduct: [ 'MarketplaceId', 'ASINList' ] },
+			{ GetMatchingProductForId: [
+				'MarketplaceId',
+				'IdType',
+				'IdList',
+			] },
+			{ GetCompetitivePricingForSKU: [ 'MarketplaceId', 'SellerSKUList' ] },
+			{ GetCompetitivePricingForASIN: [ 'MarketplaceId', 'ASINList' ] },
+			{ GetLowestOfferListingsForSKU: [
+				'MarketplaceId',
+				'SellerSKUList',
+				'ItemCondition',
+			] },
+			{ GetLowestOfferListingsForASIN: [
+				'MarketplaceId',
+				'ASINList',
+				'ItemCondition',
+			] },
+			{ GetLowestPricedOffersForSKU: [
+				'MarketplaceId',
+				'SellerSKU',
+				'ItemCondition',
+			] },
+			{ GetLowestPricedOffersForASIN: [
+				'MarketplaceId',
+				'ASIN',
+				'ItemCondition',
+			] },
+			{ GetMyFeesEstimate: [ 'FeesEstimateRequestList' ] },
+			{ GetMyPriceForSKU: [
+				'MarketplaceId',
+				'SellerSKUList',
+				'ItemCondition',
+			] },
+			{ GetMyPriceForASIN: [
+				'MarketplaceId',
+				'ASINList',
+				'ItemCondition',
+			] },
+			{ GetProductCategoriesForSKU: [ 'MarketplaceId', 'SellerSKU' ] },
+			{ GetProductCategoriesForSKU: [ 'MarketplaceId', 'ASIN' ] },
+			{ GetServiceStatus: '' },
+		],
+		Version: '2011-10-01',
+		Headers: { 'Content-Type': 'x-www-form-urlencoded' },
+	},
+	Orders: {
+		Operations: [
+			'ListMatchingProducts',
+			'GetMatchingProduct',
+			'GetMatchingProductForId',
+			'GetCompetitivePricingForSKU',
+			'GetCompetitivePricingForASIN',
+			'GetLowestOfferListingsForSKU',
+			'GetLowestOfferListingsForASIN',
+			'GetLowestPricedOffersForSKU',
+			'GetLowestPricedOffersForASIN',
+			'GetMyFeesEstimate',
+			'GetMyPriceForSKU',
+			'GetMyPriceForASIN',
+			'GetProductCategoriesForSKU',
+			'GetProductCategoriesForASIN',
+			'GetServiceStatus',
+		],
+		Version: '2011-10-01',
+		Headers: { 'Content-Type': 'text/xml' },
+	},
+}
