@@ -2,19 +2,19 @@
 
 ## Functions
 
-- [ ] 🧪 RequestReport
-- [ ] 🧪 GetReportRequestList
-- [ ] 🧪 GetReportRequestListByNextToken
-- [ ] 🧪 GetReportRequestCount
+- [ ] RequestReport
+- [ ] GetReportRequestList
+- [ ] GetReportRequestListByNextToken
+- [ ] GetReportRequestCount
 - [ ] CancelReportRequests
-- [ ] 🧪 GetReportList
-- [ ] 🧪 GetReportListByNextToken
-- [ ] 🧪 GetReportCount
-- [ ] 🧪 GetReport
+- [ ] GetReportList
+- [ ] GetReportListByNextToken
+- [ ] GetReportCount
+- [ ] GetReport
 - [ ] ManageReportSchedule
-- [ ] 🧪 GetReportScheduleList
-- [ ] 🧪 GetReportScheduleListByNextToken
-- [ ] 🧪 GetReportScheduleCount
+- [ ] GetReportScheduleList
+- [ ] GetReportScheduleListByNextToken
+- [ ] GetReportScheduleCount
 - [ ] UpdateReportAcknowledgements
 
 ## Reports Types
@@ -25,34 +25,34 @@
 
 #### *Inventory Reports*
 
-- [ ] 🧪 Inventory Report
-- [ ] 🧪 All Listings Report
-- [ ] 🧪 Active Listings Report
-- [ ] 🧪 Inactive Listings Report
-- [ ] 🧪 Open Listings Report
-- [ ] 🧪 Open Listings Report Lite
-- [ ] 🧪 Open Listings Report Liter
-- [ ] 🧪 Canceled Listings Report
-- [ ] 🧪 Sold Listings Report
-- [ ] 🧪 Listing Quality and Suppressed Listing Report
-- [ ] 🧪 Pan-European Eligibility: FBA ASINs
-- [ ] 🧪 Pan-European Eligibility: Self-fulfilled ASINs
-- [ ] 🧪 Global Expansion Opportunities Report
-- [ ] 🧪 Referral Fee Preview Report
+- [ ] Inventory Report
+- [ ] All Listings Report
+- [ ] Active Listings Report
+- [ ] Inactive Listings Report
+- [ ] Open Listings Report
+- [ ] Open Listings Report Lite
+- [ ] Open Listings Report Liter
+- [ ] Canceled Listings Report
+- [ ] Sold Listings Report
+- [ ] Listing Quality and Suppressed Listing Report
+- [ ] Pan-European Eligibility: FBA ASINs
+- [ ] Pan-European Eligibility: Self-fulfilled ASINs
+- [ ] Global Expansion Opportunities Report
+- [ ] Referral Fee Preview Report
 
 #### **Order Reports**
 
-- [ ] 🧪 Unshipped Orders Report
-- [ ] 🧪 Requested or Scheduled Flat File Order Report
-- [ ] 🧪 Flat File Order Report
+- [ ] Unshipped Orders Report
+- [ ] Requested or Scheduled Flat File Order Report
+- [ ] Flat File Order Report
 
 #### **Order Tracking Reports**
 
-- [ ] 🧪 Flat File Orders By Last Update Report
-- [ ] 🧪 Flat File Orders By Order Date Report
-- [ ] 🧪 Flat File Archived Orders Report
-- [ ] 🧪 XML Orders By Last Update Report
-- [ ] 🧪 XML Orders By Order Date Report
+- [ ] Flat File Orders By Last Update Report
+- [ ] Flat File Orders By Order Date Report
+- [ ] Flat File Archived Orders Report
+- [ ] XML Orders By Last Update Report
+- [ ] XML Orders By Order Date Report
 
 #### **Pending Order Reports** (Only Japan Marketplace)
 
@@ -62,12 +62,12 @@
 
 #### **Returns Reports**
 
-- [ ] 🧪 XML Returns Report by Return Date
-- [ ] 🧪 Flat File Returns Report by Return Date
-- [ ] 🧪 XML Prime Returns Report by Return Date
-- [ ] 🧪 CSV Prime Returns Report by Return Date
-- [ ] 🧪 XML Return Attributes Report by Return Date
-- [ ] 🧪 Flat File Return Attributes Report by Return Date
+- [ ] XML Returns Report by Return Date
+- [ ] Flat File Returns Report by Return Date
+- [ ] XML Prime Returns Report by Return Date
+- [ ] CSV Prime Returns Report by Return Date
+- [ ] XML Return Attributes Report by Return Date
+- [ ] Flat File Return Attributes Report by Return Date
 
 #### **Performance Reports**
 

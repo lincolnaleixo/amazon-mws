@@ -26,11 +26,11 @@ Legend of annotations:
 
 ---
 
-- [ ] 🧪 ListFinancialEventGroups
-- [ ] 🧪 ListFinancialEventGroupsByNextToken
-- [ ] 🧪 ListFinancialEvents
-- [ ] 🧪 ListFinancialEventsByNextToken
-- [ ] 🧪 GetServiceStatus
+- [ ] ListFinancialEventGroups
+- [ ] ListFinancialEventGroupsByNextToken
+- [ ] ListFinancialEvents
+- [ ] ListFinancialEventsByNextToken
+- [ ] GetServiceStatus
 
 ## 4. Fulfillment Inbound Shipment
 
@@ -98,20 +98,20 @@ Legend of annotations:
 
 ---
 
-- [ ] 🧪 ListOrders
-- [ ] 🧪 ListOrdersByNextToken
-- [ ] 🧪 GetOrder
-- [ ] 🧪 ListOrderItems
-- [ ] 🧪 ListOrderItemsByNextToken
-- [ ] 🧪 GetServiceStatus
+- [ ] ListOrders
+- [ ] ListOrdersByNextToken
+- [ ] GetOrder
+- [ ] ListOrderItems
+- [ ] ListOrderItemsByNextToken
+- [ ] GetServiceStatus
 
 ## 9. Products API
 
 ---
 
-- [ ] ListMatchingProducts
+- [ ] 🧪 ListMatchingProducts
 - [ ] 🧪 GetMatchingProduct
-- [ ] GetMatchingProductForId
+- [ ] 🧪 GetMatchingProductForId
 - [ ] 🧪 GetCompetitivePricingForSKU
 - [ ] 🧪 GetCompetitivePricingForASIN
 - [ ] 🧪 GetLowestOfferListingsForSKU
@@ -119,20 +119,20 @@ Legend of annotations:
 - [ ] 🧪 GetLowestPricedOffersForSKU
 - [ ] 🧪 GetLowestPricedOffersForASIN
 - [ ] GetMyFeesEstimate
-- [ ] GetMyPriceForSKU
+- [ ] 🧪 GetMyPriceForSKU
 - [ ] 🧪 GetMyPriceForASIN
-- [ ] GetProductCategoriesForSKU
+- [ ] 🧪 GetProductCategoriesForSKU
 - [ ] 🧪 GetProductCategoriesForASIN
-- [ ] GetServiceStatus
+- [ ] 🧪 GetServiceStatus
 
 ## 9. Recommendations
 
 ---
 
-- [ ] 🧪 GetLastUpdatedTimeForRecommendations
-- [ ] 🧪 ListRecommendations
-- [ ] 🧪 ListRecommendationsByNextToken
-- [ ] 🧪 GetServiceStatus
+- [ ] GetLastUpdatedTimeForRecommendations
+- [ ] ListRecommendations
+- [ ] ListRecommendationsByNextToken
+- [ ] GetServiceStatus
 
 ## 10. Reports API
 
@@ -142,9 +142,9 @@ Legend of annotations:
 
 ---
 
-- [ ] 🧪 ListMarketplaceParticipations
+- [ ] ListMarketplaceParticipations
 - [ ] ListMarketplaceParticipationsByNextToken
-- [ ] 🧪 GetServiceStatus
+- [ ] GetServiceStatus
 
 ## 12. Shipment Invoicing
 
