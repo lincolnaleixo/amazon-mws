@@ -24,7 +24,6 @@ const testOptions = require('./resources/options');
 			[ action ] = Object.keys(operation)
 			process.stdout.write(`Testing ${action}`)
 
-			const attrName = `${action}Result`
 			const operationParams = Object
 				.values(apiResources[config.feature].Operations
 					.find((item) => Object.keys(item)[0] === action))[0]
@@ -57,7 +56,7 @@ const testOptions = require('./resources/options');
 			}
 			const response = await products.request(action, params)
 
-			fs.writeFileSync(`${config.dumpPath}/${action}.json`, JSON.stringify(response[attrName], 2))
+			fs.writeFileSync(`${config.dumpPath}/${action}.json`, JSON.stringify(response, 2))
 			process.stdout.write('\x1b[32m Pass ✓ \x1B[0m\r\n')
 			testsResults += `${action} test Passed ✓\n`
 		} catch (err) {

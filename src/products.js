@@ -24,6 +24,7 @@ class Products extends Core {
 	 */
 	request(action, params) {
 		if (!super.isOperationValid(action)) throw new Error(`Action ${action} does not exist on Amazon MWS or not supported`)
+
 		// if (!super.areTypesValid(params)) throw new Error(`Action ${action} does not exist on Amazon MWS or not supported`)
 		// const formattedParams = super.formatParams(params)
 

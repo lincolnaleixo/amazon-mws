@@ -296,7 +296,7 @@ class Core {
 		throw new Error(JSON.stringify(responseInfo, null, 2))
 
 		// if (this.response.ErrorResponse) await this.handleResponseErrors(url, requestInfo, backOffTimer)
-	 }
+	}
 
 	/**
 	 * Start the request into MWS
@@ -304,7 +304,8 @@ class Core {
 	 * @param {Object} params
 	 */
 	async startRequest(action, params) {
-		const attrName = `${action}Response`
+		const attrNameResponse = `${action}Response`
+		const attrNameResult = `${action}Result`
 		const requestInfo = {
 			action,
 			api: this.api,
@@ -314,7 +315,7 @@ class Core {
 		}
 		const response = await this.fetchMWS(requestInfo)
 
-		return response[attrName]
+		return response[attrNameResponse][attrNameResult]
 	}
 
 }
