@@ -9,6 +9,9 @@ dump
 keys
 notebooks
 cache
+.ipynb_checkpoints
+.packages-cache
+.devcontainer
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
 
