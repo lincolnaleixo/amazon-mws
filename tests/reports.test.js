@@ -24,34 +24,13 @@ const credentials = {
 	SecretAccessKey: process.env.SECRET_ACCESS_KEY,
 	SellerId: process.env.SELLER_ID,
 	MarketplaceId: process.env.MARKETPLACE_ID,
-}
-
-async function processReport(reportType) {
-	const dumpFolder = 'dump'
-	const dumpFile = `${reportType}.json`
-	const reports = new Reports(credentials)
-	let reportInfo
-	// Requesting report
-	const reportRequestId = await reports.requestReport(reportType)
-	// Check report status and waiting for report completion
-	const reportResponse = await reports.waitReportCompletition(reportRequestId)
-	if (typeof reportResponse === 'string') {
-		// Getting report info
-		const generatedReportId = reportResponse
-		reportInfo = await reports.getReport(generatedReportId)
-	} else {
-		reportInfo = reportResponse
-	}
-	console.log('Saving report information')
-	jsonfile.writeFileSync(path.join(dumpFolder, dumpFile), reportInfo, { spaces: 2 })
-	console.log(`${reportType} information saved`)
-
-	return true
-}
+};
 
 (async () => {
+	const reports = new Reports(credentials)
 	for (let i = 0; i < reportTypes.length; i += 1) {
-		await processReport(reportTypes[i])
+		const response = await reports.processReport(reportTypes[i])
+		console.log(response)
 	}
 
 	console.log('Testing Reports Ended')

@@ -1,5 +1,6 @@
-
 const Cawer = require('cawer')
+const jsonfile = require('jsonfile')
+const path = require('path')
 const Core = require('./core')
 
 let jsonResponse
@@ -8,6 +9,9 @@ const cawer = new Cawer()
 
 class Reports extends Core {
 
+	/**
+	 * @param {string} reportType
+	 */
 	async requestReport(reportType) {
 		let reportRequestId
 		console.log('Requesting report type', reportType)
@@ -27,6 +31,9 @@ class Reports extends Core {
 		return reportRequestId
 	}
 
+	/**
+	 * @param {string} reportRequestId
+	 */
 	async waitReportCompletition(reportRequestId) {
 		console.log(`Waiting for completion of report request id: ${reportRequestId}`)
 		let generatedReportId
@@ -53,6 +60,9 @@ class Reports extends Core {
 		}
 	}
 
+	/**
+	 * @param {string} generatedReportId
+	 */
 	async getReport(generatedReportId) {
 		console.log('Done. Getting report information')
 
@@ -62,6 +72,26 @@ class Reports extends Core {
 		})
 
 		return jsonResponse
+	}
+
+	/**
+	 * @param {string} reportType
+	 */
+	async processReport(reportType) {
+		let reportInfo
+		// Requesting report
+		const reportRequestId = await this.requestReport(reportType)
+		// Check report status and waiting for report completion
+		const reportResponse = await this.waitReportCompletition(reportRequestId)
+		if (typeof reportResponse === 'string') {
+			// Getting report info
+			const generatedReportId = reportResponse
+			reportInfo = await this.getReport(generatedReportId)
+		} else {
+			reportInfo = reportResponse
+		}
+
+		return reportInfo
 	}
 }
 
