@@ -1,6 +1,6 @@
 const jsonfile = require('jsonfile')
 const path = require('path')
-const Reports = require('../src/reports')
+const Reports = require('../src/reports.js')
 require('dotenv').config()
 
 const reportTypes = [
@@ -21,7 +21,7 @@ const reportTypes = [
 ]
 const credentials = {
 	AWSAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
-	secretAccessKey: process.env.SECRET_ACCESS_KEY,
+	SecretAccessKey: process.env.SECRET_ACCESS_KEY,
 	SellerId: process.env.SELLER_ID,
 	MarketplaceId: process.env.MARKETPLACE_ID,
 }

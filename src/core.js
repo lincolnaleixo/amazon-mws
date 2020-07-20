@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable complexity */
 const qs = require('qs')
 const httpAction = 'POST'
@@ -59,7 +60,7 @@ class Core {
 	+ `/\n${paramsToSign}`
 		// console.log('\nStringToSign:\n')
 		// console.log(stringToSign)
-		const signature = crypto.createHmac('sha256', this.credentials.secretAccessKey)
+		const signature = crypto.createHmac('sha256', this.credentials.SecretAccessKey)
 			.update(stringToSign, 'utf8')
 			.digest('base64')
 
@@ -80,6 +81,7 @@ class Core {
 		} else {
 			formattedResponseText = await csvtojson({
 				delimiter: '\t',
+				// @ts-ignore
 				ut: 'json',
 			})
 				.fromString(responseText)
@@ -129,6 +131,7 @@ class Core {
 					} else if (err.Error !== undefined && err.Error.message === 'socket hang up') {
 						console.log('Socket hanged up, trying again in 30 seconds', JSON.stringify(err, null, 2))
 					}
+					console.log(JSON.stringify(err, null, 4))
 					cawer.sleep(30); continue
 				}
 				throw new Error(`Not known error, check response:\n${JSON.stringify(err, null, 2)}`)

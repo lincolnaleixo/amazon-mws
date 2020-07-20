@@ -13,7 +13,8 @@
 	"extensions": [
 		"dbaeumer.vscode-eslint",
 		"svipas.code-autocomplete",
-		"yatki.vscode-surround"
+		"yatki.vscode-surround",
+		"pflannery.vscode-versionlens"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
