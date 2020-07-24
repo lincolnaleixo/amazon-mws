@@ -3,7 +3,7 @@ const path = require('path')
 const Reports = require('../src/reports.js')
 require('dotenv').config()
 
-const reportTypes = [
+const inventoryReportTypes = [
 	'_GET_FLAT_FILE_OPEN_LISTINGS_DATA_',
 	'_GET_MERCHANT_LISTINGS_ALL_DATA_',
 	'_GET_MERCHANT_LISTINGS_DATA_',
@@ -19,6 +19,7 @@ const reportTypes = [
 	'_GET_PAN_EU_OFFER_STATUS_',
 	// '_GET_MFN_PAN_EU_OFFER_STATUS_' - Only for EU markertplaces,
 ]
+const fbaReports = [ '_GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA_' ]
 const credentials = {
 	AWSAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
 	SecretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -28,8 +29,12 @@ const credentials = {
 
 (async () => {
 	const reports = new Reports(credentials)
-	for (let i = 0; i < reportTypes.length; i += 1) {
-		const response = await reports.processReport(reportTypes[i])
+	// for (let i = 0; i < inventoryReportTypes.length; i += 1) {
+	// 	const response = await reports.processReport(inventoryReportTypes[i], 30, 'inventory')
+	// 	console.log(response)
+	// }
+	for (let i = 0; i < fbaReports.length; i += 1) {
+		const response = await reports.processReport(fbaReports[i], 30, 'fba')
 		console.log(response)
 	}
 
