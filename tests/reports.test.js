@@ -30,12 +30,12 @@ const credentials = {
 (async () => {
 	const reports = new Reports(credentials)
 	// for (let i = 0; i < inventoryReportTypes.length; i += 1) {
-	// 	const response = await reports.processReport(inventoryReportTypes[i], 30, 'inventory')
+	// 	const response = await reports.processReport(inventoryReportTypes[i], 30)
 	// 	console.log(response)
 	// }
+
 	for (let i = 0; i < fbaReports.length; i += 1) {
-		const response = await reports.processReport(fbaReports[i], 30, 'fba')
-		console.log(response)
+		await reports.processReport(fbaReports[i], 30)
 	}
 
 	console.log('Testing Reports Ended')

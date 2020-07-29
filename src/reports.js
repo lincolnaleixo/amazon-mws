@@ -3,6 +3,7 @@ const jsonfile = require('jsonfile')
 const path = require('path')
 const fs = require('fs-extra')
 const moment = require('moment')
+const { exception } = require('console')
 const Core = require('./core')
 const cawer = new Cawer()
 
@@ -32,6 +33,7 @@ class Reports extends Core {
 
 	/**
 	 * @param {string} reportRequestId
+	 * @param {string} reportType
 	 */
 	async waitReportCompletition(reportRequestId, reportType) {
 		console.log(`Waiting for completion of report request id: ${reportRequestId}`)
@@ -76,23 +78,29 @@ class Reports extends Core {
 		return jsonResponse
 	}
 
+	/**
+	 * @param {string} reportType
+	 */
 	async getLastAvailableReport(reportType) {
-		const jsonResponse = await this.request({
-			Action: 'GetReportList',
-			ActionParams: { 'ReportTypeList.Type.1': reportType },
-		})
-		const reportId = jsonResponse
-			.GetReportListResponse.GetReportListResult.ReportInfo.ReportId
+		try {
+			const jsonResponse = await this.request({
+				Action: 'GetReportList',
+				ActionParams: { 'ReportTypeList.Type.1': reportType },
+			})
+			const reportId = jsonResponse.GetReportListResponse.GetReportListResult.ReportInfo[0].ReportId
 
-		return reportId
+			return reportId
+		} catch (err) {
+			throw new Error(`Error on getLastAvailableReport: ${err}`)
+		}
 	}
 
 	/**
-	 * @param {string} dumpFolder
+	 * @param {string} cacheFolder`
 	 * @param {string} reportType
 	 */
-	getMinutesFileSaved(dumpFolder, reportType) {
-		const fileStats = fs.statSync(path.join(dumpFolder, `${reportType}.json`))
+	getMinutesFileSaved(cacheFolder, reportType) {
+		const fileStats = fs.statSync(path.join(cacheFolder, `${reportType}.json`))
 		const dateFileCreation = moment.utc(fileStats.atime).format('YYYY-MM-DDTHH:mm:ss')
 		const dateNow = moment().utc()
 			.format('YYYY-MM-DDTHH:mm:ss')
@@ -104,16 +112,16 @@ class Reports extends Core {
 	/**
 	 * @param {string} reportType
 	 */
-	async processReport(reportType, cacheMinutes = 30, reportCategory = undefined) {
-		let dumpFolder = path.join(__dirname, '..', 'dump')
-		if (reportCategory !== undefined) dumpFolder = path.join(dumpFolder, reportCategory)
+	async processReport(reportType, cacheMinutes = 30) {
+		const cacheFolder = path.join(__dirname, '..', 'cache')
+		// if (reportCategory !== undefined) cacheFolder = path.join(cacheFolder, reportCategory)
 		let reportInfo
-		if (cacheMinutes && fs.existsSync(path.join(dumpFolder, `${reportType}.json`))) {
-			const minutes = this.getMinutesFileSaved(dumpFolder, reportType)
+		if (cacheMinutes && fs.existsSync(path.join(cacheFolder, `${reportType}.json`))) {
+			const minutes = this.getMinutesFileSaved(cacheFolder, reportType)
 			if (minutes <= cacheMinutes) {
 				console.log('Cache is valid')
 
-				return jsonfile.readFileSync(path.join(dumpFolder, `${reportType}.json`))
+				return jsonfile.readFileSync(path.join(cacheFolder, `${reportType}.json`))
 			}
 		}
 		const reportRequestId = await this.requestReport(reportType)
@@ -124,8 +132,8 @@ class Reports extends Core {
 		} else reportInfo = reportResponse
 
 		if (cacheMinutes) {
-			fs.ensureDirSync(path.join(dumpFolder))
-			jsonfile.writeFileSync(path.join(dumpFolder, `${reportType}.json`), reportInfo, { spaces: 2 })
+			fs.ensureDirSync(path.join(cacheFolder))
+			jsonfile.writeFileSync(path.join(cacheFolder, `${reportType}.json`), reportInfo, { spaces: 2 })
 		}
 
 		return reportInfo
