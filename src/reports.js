@@ -40,6 +40,7 @@ class Reports extends Core {
 		let sleeptimer = 2
 		while (true) {
 			const jsonResponse = await this.request({
+				Api: 'Reports',
 				Action: 'GetReportRequestList',
 				ActionParams: { 'ReportRequestIdList.Id.1': reportRequestId },
 			})
@@ -71,6 +72,7 @@ class Reports extends Core {
 		console.log('Done. Getting report information')
 
 		const jsonResponse = await this.request({
+			Api: 'Reports',
 			Action: 'GetReport',
 			ActionParams: { ReportId: generatedReportId },
 		})
@@ -84,6 +86,7 @@ class Reports extends Core {
 	async getLastAvailableReport(reportType) {
 		try {
 			const jsonResponse = await this.request({
+				Api: 'Reports',
 				Action: 'GetReportList',
 				ActionParams: { 'ReportTypeList.Type.1': reportType },
 			})
