@@ -3,7 +3,6 @@ const jsonfile = require('jsonfile')
 const path = require('path')
 const fs = require('fs-extra')
 const moment = require('moment')
-const { exception } = require('console')
 const Core = require('./core')
 const cawer = new Cawer()
 

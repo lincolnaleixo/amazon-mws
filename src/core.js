@@ -16,12 +16,18 @@ const xmlParser = new xml2js.Parser({
 const urljoin = require('url-join')
 const moment = require('moment')
 const axios = require('axios').default
-const apiVersions = { Reports: '2009-01-01' }
+const apiVersions = {
+	Reports: '2009-01-01', Orders: '2013-09-01',
+}
 const domainName = 'https://mws.amazonservices.com/'
 
 class Core {
 
-	constructor(credentials) {
+	/**
+	 * @param {object} credentials
+	 * @param {string} apiName
+	 */
+	constructor(credentials, apiName) {
 		this.credentials = credentials
 		this.requiredParams = {
 			AWSAccessKeyId: credentials.AWSAccessKeyId,
@@ -32,10 +38,13 @@ class Core {
 			SignatureMethod: 'HmacSHA256',
 			SignatureVersion: '2',
 			Timestamp: moment().toISOString(),
-			Version: apiVersions.Reports,
+			Version: apiVersions[apiName],
 		}
 	}
 
+	/**
+	 * @param {{ [x: string]: any; }} requestParams
+	 */
 	sortParameters(requestParams) {
 		const requestParamsEntriesSorted = {}
 		Object.keys(requestParams)
@@ -50,14 +59,20 @@ class Core {
 		return requestParamsEntriesSorted
 	}
 
-	signString(requestParams) {
+	/**
+	 * @param {{}} requestParams
+	 */
+	signString(requestParams, options) {
 	// delete requestParams.Signature
 		const paramsToSign = qs.stringify(requestParams)
 		// console.log('ParamsToSign:\n')
 		// console.log(paramsToSign)
-		const stringToSign = `${httpAction}\n`
-    + `mws.amazonservices.com\n`
-	+ `/\n${paramsToSign}`
+		let stringToSign = `${httpAction}\n`
+		stringToSign += `mws.amazonservices.com\n`
+		if (options.Api !== 'Reports') {
+			stringToSign += `/${options.Api}/${apiVersions[options.Api]}\n`
+		}
+		stringToSign += `${paramsToSign}`
 		// console.log('\nStringToSign:\n')
 		// console.log(stringToSign)
 		const signature = crypto.createHmac('sha256', this.credentials.SecretAccessKey)
@@ -73,6 +88,9 @@ class Core {
 		return signature
 	}
 
+	/**
+	 * @param {import("xml2js").convertableToString} responseText
+	 */
 	async formatResponseText(responseText) {
 		let formattedResponseText = []
 
@@ -90,6 +108,9 @@ class Core {
 		return formattedResponseText
 	}
 
+	/**
+	 * @param {number} throttleSleepTime
+	 */
 	throttleRequest(throttleSleepTime) {
 		console.log(`Request is throttled, sleeping for ${throttleSleepTime} seconds and trying again`)
 		cawer.sleep(throttleSleepTime)
@@ -101,8 +122,9 @@ class Core {
 			...this.requiredParams, ...options.ActionParams,
 		}
 		const requestParamsEntriesSorted = this.sortParameters(params)
-		requestParamsEntriesSorted.Signature = this.signString(requestParamsEntriesSorted)
-		const url = urljoin(domainName, `?${qs.stringify(requestParamsEntriesSorted)}`)
+		requestParamsEntriesSorted.Signature = this.signString(requestParamsEntriesSorted, options)
+
+		const url = urljoin(domainName, options.Api, apiVersions[options.Api], `?${qs.stringify(requestParamsEntriesSorted)}`)
 
 		return url
 	}

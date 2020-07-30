@@ -1,4 +1,5 @@
 const Reports = require('./reports.js')
+const Orders = require('./orders.js')
 
 class Main {
 
@@ -6,7 +7,10 @@ class Main {
      * @param {object} credentials
      */
 	constructor(credentials) {
-		return { Reports: new Reports(credentials) }
+		return {
+			Reports: new Reports(credentials, 'Reports'),
+			Orders: new Orders(credentials, 'Orders'),
+		}
 	}
 }
 

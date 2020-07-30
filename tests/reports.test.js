@@ -1,6 +1,6 @@
 const jsonfile = require('jsonfile')
 const path = require('path')
-const Reports = require('../src/reports.js')
+const Main = require('../src/main.js')
 require('dotenv').config()
 
 const inventoryReportTypes = [
@@ -28,14 +28,14 @@ const credentials = {
 };
 
 (async () => {
-	const reports = new Reports(credentials)
+	const main = new Main(credentials)
 	// for (let i = 0; i < inventoryReportTypes.length; i += 1) {
 	// 	const response = await reports.processReport(inventoryReportTypes[i], 30)
 	// 	console.log(response)
 	// }
 
 	for (let i = 0; i < fbaReports.length; i += 1) {
-		await reports.processReport(fbaReports[i], 30)
+		await main.Reports.processReport(fbaReports[i], 30)
 	}
 
 	console.log('Testing Reports Ended')
