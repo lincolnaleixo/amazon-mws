@@ -16,6 +16,7 @@ class Reports extends Core {
 		console.log('Requesting report type', reportType)
 
 		const jsonResponse = await this.request({
+			Api: 'Reports',
 			Action: 'RequestReport',
 			ActionParams: { ReportType: reportType },
 		})

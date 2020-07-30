@@ -71,6 +71,8 @@ class Core {
 		stringToSign += `mws.amazonservices.com\n`
 		if (options.Api !== 'Reports') {
 			stringToSign += `/${options.Api}/${apiVersions[options.Api]}\n`
+		} else {
+			stringToSign += '/\n'
 		}
 		stringToSign += `${paramsToSign}`
 		// console.log('\nStringToSign:\n')
@@ -124,9 +126,11 @@ class Core {
 		const requestParamsEntriesSorted = this.sortParameters(params)
 		requestParamsEntriesSorted.Signature = this.signString(requestParamsEntriesSorted, options)
 
-		const url = urljoin(domainName, options.Api, apiVersions[options.Api], `?${qs.stringify(requestParamsEntriesSorted)}`)
+		if (options.Api !== 'Reports') {
+			return urljoin(domainName, options.Api, apiVersions[options.Api], `?${qs.stringify(requestParamsEntriesSorted)}`)
+		}
 
-		return url
+		return urljoin(domainName, `?${qs.stringify(requestParamsEntriesSorted)}`)
 	}
 
 	async request(options) {

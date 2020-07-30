@@ -13,5 +13,5 @@ class Main {
 		}
 	}
 }
-
+// TODO ver se da para exports o object direto e dai consegue ter intelissense
 module.exports = Main
