@@ -2,7 +2,7 @@ const Cawer = require('cawer')
 const jsonfile = require('jsonfile')
 const path = require('path')
 const fs = require('fs-extra')
-const moment = require('moment')
+const moment = require('moment-timezone')
 const Core = require('./core')
 const cawer = new Cawer()
 

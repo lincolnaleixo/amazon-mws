@@ -14,7 +14,7 @@ const xmlParser = new xml2js.Parser({
 	charkey: 'Value',
 })
 const urljoin = require('url-join')
-const moment = require('moment-timezone')
+const moment = require('moment')
 const axios = require('axios').default
 const apiVersions = {
 	Reports: '2009-01-01', Orders: '2013-09-01',
