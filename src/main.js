@@ -1,5 +1,6 @@
 const Reports = require('./reports.js')
 const Orders = require('./orders.js')
+const Feeds = require('./feeds.js')
 
 class Main {
 
@@ -10,6 +11,7 @@ class Main {
 		return {
 			Reports: new Reports(credentials, 'Reports'),
 			Orders: new Orders(credentials, 'Orders'),
+			Feeds: new Feeds(credentials, 'Feeds'),
 		}
 	}
 }

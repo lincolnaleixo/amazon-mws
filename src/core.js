@@ -17,7 +17,7 @@ const urljoin = require('url-join')
 const moment = require('moment')
 const axios = require('axios').default
 const apiVersions = {
-	Reports: '2009-01-01', Orders: '2013-09-01',
+	Reports: '2009-01-01', Orders: '2013-09-01', Feeds: '2009-01-01',
 }
 const domainName = 'https://mws.amazonservices.com/'
 
@@ -139,12 +139,25 @@ class Core {
 			throttleSleepTime *= 2
 			const url = this.prepareUrl(options)
 			try {
-				const response = await axios.request({
+				const requestItems = {
+					headers: {
+						...{ 'User-Agent': 'amz-mws-api' },
+						...options.Headers,
+					},
 					method: httpAction,
 					url,
 					responseType: 'arraybuffer',
 					responseEncoding: 'binary',
-				})
+				}
+				if (options.Api === 'Feeds') {
+					requestItems.data = options.Body
+					const contentHash = crypto.createHash('md5').update(options.Body)
+						.digest('base64')
+					requestItems.ContentMD5Value = contentHash
+					requestItems.headers['Content-MD5'] = contentHash
+				}
+
+				const response = await axios.request(requestItems)
 
 				return await this.formatResponseText(response.data.toString('latin1'))
 			} catch (err) {
@@ -153,11 +166,17 @@ class Core {
 						console.log('Error 503')
 						this.throttleRequest(throttleSleepTime); continue
 					} else if (err.response.status === 400) {
-						console.log('Error 400', JSON.stringify(err, null, 2))
+						// console.log('Error 400', JSON.stringify(err, null, 2))
+						const responseText = await this.formatResponseText(err.response.data.toString())
+						console.log(`${err.response.status}:${err.response.statusText}\n${responseText.ErrorResponse.Error.Code}:${responseText.ErrorResponse.Error.Message}`)
+						throw new Error(`Bad request`)
 					} else if (err.Error !== undefined && err.Error.message === 'socket hang up') {
 						console.log('Socket hanged up, trying again in 30 seconds', JSON.stringify(err, null, 2))
 					}
+					// const responseText = await this.formatResponseText(err.response.data.toString())
+					// console.log(`${err.response.status}:${err.response.statusText}\n${responseText.ErrorResponse.Error.Code}:${responseText.ErrorResponse.Error.Message}`)
 					console.log(JSON.stringify(err, null, 4))
+					console.log('Sleeping for 30 seconds and trying again')
 					cawer.sleep(30); continue
 				}
 				throw new Error(`Not known error, check response:\n${JSON.stringify(err, null, 2)}`)

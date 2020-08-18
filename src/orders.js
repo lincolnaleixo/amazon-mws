@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 const Cawer = require('cawer')
 const jsonfile = require('jsonfile')
 const path = require('path')
@@ -31,8 +32,8 @@ class Orders extends Core {
 	}
 
 	async requestOrders(marketplaceId, createdAfter, createdBefore = undefined) {
+		console.log(`Requesting orders from ${createdAfter} to ${createdBefore}`)
 		let ordersList
-		console.log('Requesting orders')
 		const createdAfterOffset = moment(createdAfter).tz('America/Los_Angeles')
 			.format('Z')
 		const ActionParams = {
@@ -44,21 +45,57 @@ class Orders extends Core {
 				.format('Z')
 			ActionParams.CreatedBefore = createdBefore + createdBeforeOffset
 		}
-		const jsonResponse = await this.request({
-			Api: 'Orders',
-			Action: 'ListOrders',
-			ActionParams,
-		})
 		try {
+			const jsonResponse = await this.request({
+				Api: 'Orders',
+				Action: 'ListOrders',
+				ActionParams,
+				Headers: { 'Content-Type': 'x-www-form-urlencoded' },
+			})
 			ordersList = jsonResponse.ListOrdersResponse.ListOrdersResult.Orders.Order
 			ordersList = this.convertOrdersDatesToLA(ordersList)
+			let nextToken = jsonResponse.ListOrdersResponse.ListOrdersResult.NextToken || undefined
+			while (true) {
+				if (nextToken) {
+					const nextTokenResponse = await this.requestNextTokenOrders(nextToken)
+					ordersList = [ ...ordersList, ...nextTokenResponse.ordersList ]
+					nextToken = nextTokenResponse.nextToken
+				} else break
+			}
 		} catch (err) {
 			console.log(`Error on requestOrders: ${err}`)
 		}
 
 		if (ordersList.length === 0) return []
 
-		return ordersList.filter((order) => order.OrderStatus !== 'Canceled')
+		// return ordersList.filter((order) => order.OrderStatus !== 'Canceled')
+		return ordersList
+	}
+
+	async requestNextTokenOrders(nextToken) {
+		console.log(`Requesting orders from next token ${nextToken}`)
+		let ordersList
+		let jsonResponse
+		const ActionParams = { NextToken: nextToken }
+		try {
+			jsonResponse = await this.request({
+				Api: 'Orders',
+				Action: 'ListOrdersByNextToken',
+				ActionParams,
+				Headers: { 'Content-Type': 'x-www-form-urlencoded' },
+			})
+			ordersList = jsonResponse.ListOrdersByNextTokenResponse.ListOrdersByNextTokenResult.Orders.Order
+			ordersList = this.convertOrdersDatesToLA(ordersList)
+		} catch (err) {
+			console.log(`Error on requestOrders: ${err}`)
+		}
+
+		return {
+			// ordersList: ordersList.filter((order) => order.OrderStatus !== 'Canceled'),
+			ordersList,
+			nextToken: jsonResponse
+				.ListOrdersByNextTokenResponse.ListOrdersByNextTokenResult.NextToken || undefined,
+		}
 	}
 }
 

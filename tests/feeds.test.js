@@ -2,6 +2,7 @@ const jsonfile = require('jsonfile')
 const path = require('path')
 const moment = require('moment')
 const Main = require('../src/main')
+const options = require('./resources.json')
 require('dotenv').config()
 
 const credentials = {
@@ -10,14 +11,15 @@ const credentials = {
 	SellerId: process.env.SELLER_ID,
 	MarketplaceId: process.env.MARKETPLACE_ID,
 };
+
 (async () => {
 	const main = new Main(credentials)
-	const createdAfter = '2020-02-01T00:00:00.000'
-	const createdBefore = '2020-07-03T23:59:59.999'
-	const ordersList = await main.Orders
-		.requestOrders(credentials.MarketplaceId, createdAfter, createdBefore)
+	const params = {
+		MarketplaceId: credentials.MARKETPLACE_ID,
+		FeedType: '_POST_PRODUCT_PRICING_DATA_',
+	}
+	const response = await main.Feeds.submit(params, options.feeds)
 	const cacheFolder = path.join(__dirname, '..', 'cache')
-	jsonfile.writeFileSync(path.join(cacheFolder, `orders.json`), ordersList, { spaces: 2 })
-	console.log(`Total orders: ${ordersList.length}`)
-	console.log('Orders Ended')
+	jsonfile.writeFileSync(path.join(cacheFolder, `feeds.json`), response, { spaces: 2 })
+	console.log('Feeds Ended')
 })()
