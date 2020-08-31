@@ -3,7 +3,7 @@
   <Header>
     <DocumentVersion>1.01</DocumentVersion>
 
-    <MerchantIdentifier>A1WFBJU1ENSTGW</MerchantIdentifier>
+    <MerchantIdentifier>$$SellerId$$</MerchantIdentifier>
   </Header>
   <MessageType>Price</MessageType>
   <Message>
@@ -17,5 +17,5 @@
         <SalePrice currency="USD">$$SalePrice$$</SalePrice>
       </Sale>
     </Price>
-    </Message>
-  </AmazonEnvelope>
+  </Message>
+</AmazonEnvelope>

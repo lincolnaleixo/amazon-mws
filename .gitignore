@@ -10,6 +10,7 @@ keys
 notebooks
 cache
 dump
+tests/config
 .ipynb_checkpoints
 .packages-cache
 .devcontainer

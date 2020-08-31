@@ -1,23 +1,17 @@
 const jsonfile = require('jsonfile')
 const path = require('path')
-const moment = require('moment')
-const Main = require('../src/main')
-require('dotenv').config()
+const Main = require('../archive/last/main')
+const testConfig = require('./config.test.json');
 
-const credentials = {
-	AWSAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
-	SecretAccessKey: process.env.SECRET_ACCESS_KEY,
-	SellerId: process.env.SELLER_ID,
-	MarketplaceId: process.env.MARKETPLACE_ID,
-};
 (async () => {
-	const main = new Main(credentials)
-	const createdAfter = '2020-02-01T00:00:00.000'
+	const main = new Main(testConfig.CREDENTIALS)
+	const createdAfter = '2020-06-01T00:00:00.000'
 	const createdBefore = '2020-07-03T23:59:59.999'
 	const ordersList = await main.Orders
-		.requestOrders(credentials.MarketplaceId, createdAfter, createdBefore)
-	const cacheFolder = path.join(__dirname, '..', 'cache')
-	jsonfile.writeFileSync(path.join(cacheFolder, `orders.json`), ordersList, { spaces: 2 })
+		.processOrders(testConfig.CREDENTIALS.MWS_MARKETPLACE_ID, createdAfter, createdBefore)
+	const dumpFolder = path.join(__dirname, '..', 'dump')
+	jsonfile.writeFileSync(path.join(dumpFolder, `orders.json`), ordersList, { spaces: 2 })
 	console.log(`Total orders: ${ordersList.length}`)
 	console.log('Orders Ended')
 })()
+

@@ -1,0 +1,26 @@
+module.exports = {
+	Reports: [
+		'RequestReport',
+		'GetReportRequestList',
+		'GetReportRequestListByNextToken',
+		'GetReportRequestCount',
+		'CancelReportRequests',
+		'GetReportList',
+		'GetReportListByNextToken',
+		'GetReportCount',
+		'GetReport',
+		'ManageReportSchedule',
+		'GetReportScheduleList',
+		'GetReportScheduleListByNextToken',
+		'GetReportScheduleCount',
+		'UpdateReportAcknowledgements',
+	],
+	Orders: [
+		'ListOrders',
+		'ListOrdersByNextToken',
+		'GetOrder',
+		'ListOrderItems',
+		'ListOrderItemsByNextToken',
+		'GetServiceStatus',
+	],
+}
