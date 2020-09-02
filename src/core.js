@@ -4,7 +4,10 @@ const qs = require('qs')
 const httpAction = 'POST'
 const crypto = require('crypto')
 const xml2js = require('xml2js')
+const fs = require('fs-extra')
 const csvtojson = require('csvtojson')
+const path = require('path')
+const contentBoilerPlates = { _POST_PRODUCT_PRICING_DATA_: 'price_boilerplate.xml' }
 // @ts-ignore
 const Cawer = require('cawer')
 const cawer = new Cawer()
@@ -149,8 +152,17 @@ class Core {
 				}
 
 				if (this.api === 'Feeds') {
-					requestItems.data = options.Body
-					const contentHash = crypto.createHash('md5').update(options.Body)
+					const contentBoilerPlate = fs
+						.readFileSync(path.join(__dirname, `../resources/feeds/${contentBoilerPlates[options.Params.FeedType]}`)).toString()
+					const body = contentBoilerPlate
+						.replace('$$SellerId$$', options.Params.SellerId)
+						.replace('$$SKU$$', options.Params.SKU)
+						.replace('$$StandardPrice$$', options.Params.StandardPrice)
+						.replace('$$SalePrice$$', options.Params.SalePrice)
+						.replace('$$SaleStartDate$$', options.Params.SaleStartDate)
+						.replace('$$SaleEndDate$$', options.Params.SaleEndDate)
+					requestItems.data = body
+					const contentHash = crypto.createHash('md5').update(body)
 						.digest('base64')
 					requestItems.ContentMD5Value = contentHash
 					requestItems.headers['Content-MD5'] = contentHash
