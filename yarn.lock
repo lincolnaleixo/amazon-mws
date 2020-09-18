@@ -494,9 +494,9 @@ caseless@~0.12.0:
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
 cawer@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/cawer/-/cawer-1.0.6.tgz#e9d679c10f69d3e70216d14bbb46125110840bef"
-  integrity sha512-HrG2V5qfpagHDNiRdxc4cP3PDL1rDGlw2rQJGOuEeZ+850oT8/pVw/tnYyoChB/EPdJun0fcrBfoyB2NQmNFjg==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/cawer/-/cawer-1.0.7.tgz#708e98b76d2c56d1be9ccb5c9b9cf1b907fe62ce"
+  integrity sha512-dXR33CHrTs2EHMcB3u24FQOsG5Q+4eQcPF9S3uitkbdd48aei1+hpB0vzsAubonkX6pZSabfQGgePbNbdUoHMw==
   dependencies:
     moment-timezone "^0.5.28"
     node-fetch "^2.6.0"
