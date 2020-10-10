@@ -23,4 +23,12 @@ module.exports = {
 		'ListOrderItemsByNextToken',
 		'GetServiceStatus',
 	],
+	Products: [
+		'ListOrders',
+		'ListOrdersByNextToken',
+		'GetOrder',
+		'ListOrderItems',
+		'ListOrderItemsByNextToken',
+		'GetServiceStatus',
+	],
 }
