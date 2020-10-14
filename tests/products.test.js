@@ -2,7 +2,7 @@ const jsonfile = require('jsonfile')
 const path = require('path')
 const fs = require('fs-extra')
 const AmazonMWS = require('../src/core.js')
-const testConfig = require('./config/config.test.json')
+const testConfig = require('./config.test.json')
 const rootPath = path.join(__dirname);
 
 (async () => {

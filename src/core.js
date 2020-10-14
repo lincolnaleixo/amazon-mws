@@ -173,30 +173,17 @@ class Core {
 
 				return await this.formatResponseText(response.data.toString('latin1'))
 			} catch (err) {
-				if (err.response !== undefined) {
+				if (err.response) {
 					if (err.response.status === 503) {
-						console.log('Error 503')
-						this.throttleRequest(throttleSleepTime); continue
-					} else if (err.response.status === 400) {
-						// console.log('Error 400', JSON.stringify(err, null, 2))
-						const responseText = await this.formatResponseText(err.response.data.toString())
-						console.log(`${err.response.status}:${err.response.statusText}\n${responseText.ErrorResponse.Error.Code}:${responseText.ErrorResponse.Error.Message}`)
-						throw new Error(`Bad request`)
-					} else if (err.response.status === 403) {
-						// console.log('Error 400', JSON.stringify(err, null, 2))
-						const responseText = await this.formatResponseText(err.response.data.toString())
-						console.log(`${err.response.status}:${err.response.statusText}\n${responseText.ErrorResponse.Error.Code}:${responseText.ErrorResponse.Error.Message}`)
-						throw new Error(`Forbidden`)
-					} else if (err.Error !== undefined && err.Error.message === 'socket hang up') {
-						console.log('Socket hanged up, trying again in 30 seconds', JSON.stringify(err, null, 2))
+						console.log(`Error 503: Request is throttled, sleeping for ${throttleSleepTime} seconds and trying again`)
+						cawer.sleep(throttleSleepTime); continue
+					} else if (err.Error && err.Error.message === 'socket hang up') {
+						console.log(`Socket hanged up, trying again in ${throttleSleepTime} seconds`)
+						cawer.sleep(throttleSleepTime); continue
 					}
-					// const responseText = await this.formatResponseText(err.response.data.toString())
-					// console.log(`${err.response.status}:${err.response.statusText}\n${responseText.ErrorResponse.Error.Code}:${responseText.ErrorResponse.Error.Message}`)
-					console.log(JSON.stringify(err, null, 4))
-					console.log('Sleeping for 30 seconds and trying again')
-					cawer.sleep(30); continue
+					throw new Error(err.response)
 				}
-				throw new Error(`Not known error, check response:\n${JSON.stringify(err, null, 2)}`)
+				throw new Error(err)
 			}
 		}
 	}

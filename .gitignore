@@ -110,3 +110,4 @@ tests/dump/*
 .vscode
 tests/resources/*
 tests/old/*
+tests/config.test.json
