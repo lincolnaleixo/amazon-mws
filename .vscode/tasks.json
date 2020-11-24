@@ -1,0 +1,37 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "push master to remotes",
+            "type": "shell",
+            "command": "git push github master && git push gitlab master && git push bitbucket master",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "isBackground": true,
+        },
+        {
+            "label": "push develop to remotes",
+            "type": "shell",
+            "command": "git push github develop && git push gitlab develop && git push bitbucket develop",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "isBackground": true,
+        },
+        {
+            "label": "jest test",
+            "type": "shell",
+            "command": "yarn test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "isBackground": true,
+        }
+    ],
+}

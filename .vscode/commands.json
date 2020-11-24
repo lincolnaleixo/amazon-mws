@@ -1,0 +1,13 @@
+{
+  "commands": [{
+      "text": "$(gear)",
+      "command": "workbench.action.openSettingsJson",
+      "tooltip": "Settings"
+    },
+    {
+      "text": "$(chevron-right)",
+      "command": "workbench.action.showCommands",
+      "tooltip": "Show commands"
+    }
+  ]
+}
