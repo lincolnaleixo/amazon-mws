@@ -1,187 +1,148 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable complexity */
-const qs = require('qs')
-const httpAction = 'POST'
-const crypto = require('crypto')
 const xml2js = require('xml2js')
-const fs = require('fs-extra')
 const csvtojson = require('csvtojson')
-const path = require('path')
-const contentBoilerPlates = { _POST_PRODUCT_PRICING_DATA_: 'price_boilerplate.xml' }
-// @ts-ignore
-const Cawer = require('cawer')
-const cawer = new Cawer()
+// const contentBoilerPlates = { _POST_PRODUCT_PRICING_DATA_: 'price_boilerplate.xml' }
 const xmlParser = new xml2js.Parser({
 	mergeAttrs: true,
 	explicitArray: false,
 	emptyTag: {},
 	charkey: 'Value',
 })
-const urljoin = require('url-join')
-const moment = require('moment')
 const axios = require('axios').default
-const domainName = 'https://mws.amazonservices.com/'
-const apiVersions = require('../archive/resources/apiVersions')
+const Cawer = require('cawer')
+const qs = require('qs')
+const moment = require('moment')
+const crypto = require('crypto')
+const urljoin = require('url-join')
+const endpoints = require('../resources/endpoints')
+const errorHandler = require('../helper/ErrorHandling')
+const apiReference = require('../resources/apiReference')
+const cawer = new Cawer()
 
-class Core {
+// TODO jsdoc de tudo
+// TODO headers agent e padrao pegando de api reference
 
-	/**
-	 * @param {object} credentials
-	 */
-	constructor(credentials) {
+class DefaultApi {
+
+	constructor(credentials, marketplace, api) {
 		this.credentials = credentials
+		this.marketplace = endpoints[marketplace]
+		this.api = api
+		this.moment = moment
 	}
 
-	sortParameters(requestParams) {
-		const requestParamsEntriesSorted = {}
-		Object.keys(requestParams)
-			.sort()
-			.forEach((key) => {
-				requestParamsEntriesSorted[key] = requestParams[key]
-			})
-
-		// console.log('Parameters entries sorted:\n')
-		// console.log(requestParamsEntriesSorted)
-
-		return requestParamsEntriesSorted
-	}
-
-	signString(requestParams) {
-	// delete requestParams.Signature
-		const paramsToSign = qs.stringify(requestParams)
-		// console.log('ParamsToSign:\n')
-		// console.log(paramsToSign)
-		let stringToSign = `${httpAction}\n`
-		stringToSign += `mws.amazonservices.com\n`
-		if (this.api !== 'Reports') {
-			stringToSign += `/${this.api}/${apiVersions[this.api]}\n`
-		} else {
-			stringToSign += '/\n'
-		}
-		stringToSign += `${paramsToSign}`
-		// console.log('\nStringToSign:\n')
-		// console.log(stringToSign)
-		const signature = crypto.createHmac('sha256', this.credentials.MWS_SECRET_ACCESS_KEY)
-			.update(stringToSign, 'utf8')
-			.digest('base64')
-
-		// console.log('\nSignature:\n')
-		// console.log(signature)
-
-		// console.log('\nParameters with signature:\n')
-		// console.log(requestParams)
-
-		return signature
-	}
-
-	/**
-	 * @param {import("xml2js").convertableToString} responseText
-	 */
 	async formatResponseText(responseText) {
 		let formattedResponseText = []
 
 		if (cawer.isXml(responseText)) {
 			formattedResponseText = await xmlParser.parseStringPromise(responseText)
-
-			// return this.JSONstringify(formattedResponseText)
-			// return JSON.stringify(formattedResponseText, null, 2)
 		} else {
 			formattedResponseText = await csvtojson({
 				delimiter: '\t',
-				// @ts-ignore
 				ut: 'json',
 			})
-			// @ts-ignore
 				.fromString(responseText)
 		}
 
 		return formattedResponseText
 	}
 
-	/**
-	 * @param {number} throttleSleepTime
-	 */
-	throttleRequest(throttleSleepTime) {
-		console.log(`Request is throttled, sleeping for ${throttleSleepTime} seconds and trying again`)
-		cawer.sleep(throttleSleepTime)
+	getActionName() {
+		const fnName = new Error()
+			.stack
+			.split(/\r\n|\r|\n/g)[2].split('.')[1].split('(')[0].trim()
+
+		return fnName[0].toUpperCase() + fnName.slice(1)
 	}
 
-	prepareUrl(options) {
-		this.requiredParams = {
-			AWSAccessKeyId: this.credentials.MWS_AWS_ACCESS_KEY_ID,
-			Action: '',
-			// MWSAuthToken: '',
-			SellerId: this.credentials.MWS_SELLER_ID,
-			// Signature: '',
-			SignatureMethod: 'HmacSHA256',
-			SignatureVersion: '2',
-			Timestamp: moment().toISOString(),
-			Version: apiVersions[this.api],
-		}
-		this.requiredParams.Action = options.Action
+	getStringSignature(params) {
+		const paramsToSign = qs.stringify(params)
+		const endpointDomain = this.marketplace.url.replace('https://', '')
+
+		let stringToSign = `${apiReference.Defaults.HTTPMethod}\n`
+		stringToSign += `${endpointDomain}\n`
+		stringToSign += `/${this.api !== 'Reports' ? `${this.api}/${apiReference[this.api].Version}` : ''}\n`
+		stringToSign += `${paramsToSign}`
+
+		return crypto.createHmac('sha256', this.credentials.MWS_SECRET_ACCESS_KEY)
+			.update(stringToSign, 'utf8')
+			.digest('base64')
+	}
+
+	sortParameters(params) {
+		const paramsSorted = {}
+		Object.keys(params)
+			.sort()
+			.forEach((key) => {
+				paramsSorted[key] = params[key]
+			})
+
+		return paramsSorted
+	}
+
+	getParams(options) {
 		const params = {
-			...this.requiredParams, ...options.Params,
-		}
-		const requestParamsEntriesSorted = this.sortParameters(params)
-		requestParamsEntriesSorted.Signature = this.signString(requestParamsEntriesSorted)
-
-		if (this.api !== 'Reports') {
-			return urljoin(domainName, this.api, apiVersions[this.api], `?${qs.stringify(requestParamsEntriesSorted)}`)
+			...apiReference.Defaults.RequestParams,
+			...this.getRequiredParams(options),
+			...options.Params,
 		}
 
-		return urljoin(domainName, `?${qs.stringify(requestParamsEntriesSorted)}`)
+		return this.sortParameters(params)
+	}
+
+	getRequiredParams(options) {
+		const requiredParams = {
+			Action: options.Action,
+			SellerId: this.credentials.MWS_SELLER_ID,
+			AWSAccessKeyId: this.credentials.MWS_AWS_ACCESS_KEY_ID,
+			Version: apiReference[this.api].Version,
+			Timestamp: moment().toISOString(),
+		}
+		if (apiReference.MarketplaceListActions.find((item) => item === options.Action) === undefined) {
+			requiredParams.MarketplaceId = this.marketplace.id
+		}
+
+		return requiredParams
+	}
+
+	getUrl(isSpecialRequest, params) {
+		const isApiReports = this.api === 'Reports'
+
+		return urljoin(this.marketplace.url,
+			isApiReports ? '' : urljoin(this.api, apiReference[this.api].Version),
+			isSpecialRequest ? '' : `?${qs.stringify(params)}`)
+	}
+
+	getRequestConfig(options, params) {
+		const isSpecialRequest = apiReference.SpecialRequests
+			.find((item) => item === options.Action) !== undefined
+		const requestConfig = {
+			url: this.getUrl(isSpecialRequest, params),
+			method: apiReference.Defaults.HTTPMethod,
+			data: isSpecialRequest ? new URLSearchParams(params) : options.Data || '',
+		}
+
+		if (options.Action === 'SubmitFeed') requestConfig.headers = options.Headers
+
+		return requestConfig
 	}
 
 	async request(options) {
-		this.api = options.Api
 		let throttleSleepTime = 1
-
 		while (true) {
 			throttleSleepTime *= 2
-			const url = this.prepareUrl(options)
+			const params = this.getParams(options)
+			params.Signature = this.getStringSignature(params)
+
+			const requestConfig = this.getRequestConfig(options, params)
+
 			try {
-				const requestItems = {
-					headers: {
-						...{ 'User-Agent': 'amz-mws-api' },
-						...options.Headers,
-					},
-					method: httpAction,
-					url,
-					responseType: 'arraybuffer',
-					responseEncoding: 'binary',
-				}
-
-				if (this.api === 'Feeds') {
-					const contentBoilerPlate = fs
-						.readFileSync(path.join(__dirname, `../resources/feeds/${contentBoilerPlates[options.Params.FeedType]}`)).toString()
-					const body = contentBoilerPlate
-						.replace('$$SellerId$$', options.Params.SellerId)
-						.replace('$$SKU$$', options.Params.SKU)
-						.replace('$$StandardPrice$$', options.Params.StandardPrice)
-						.replace('$$SalePrice$$', options.Params.SalePrice)
-						.replace('$$SaleStartDate$$', options.Params.SaleStartDate)
-						.replace('$$SaleEndDate$$', options.Params.SaleEndDate)
-					requestItems.data = body
-					const contentHash = crypto.createHash('md5').update(body)
-						.digest('base64')
-					requestItems.ContentMD5Value = contentHash
-					requestItems.headers['Content-MD5'] = contentHash
-				}
-
-				// @ts-ignore
-				const response = await axios.request(requestItems)
+				const response = await axios.request(requestConfig)
 
 				return await this.formatResponseText(response.data.toString('latin1'))
 			} catch (err) {
 				if (err.response) {
-					if (err.response.status === 503) {
-						console.log(`Error 503: Request is throttled, sleeping for ${throttleSleepTime} seconds and trying again`)
-						cawer.sleep(throttleSleepTime); continue
-					} else if (err.Error && err.Error.message === 'socket hang up') {
-						console.log(`Socket hanged up, trying again in ${throttleSleepTime} seconds`)
-						cawer.sleep(throttleSleepTime); continue
-					}
-					throw new Error(err.response)
+					if (await errorHandler.handleRequestError(err, throttleSleepTime)) continue
+					else throw new Error(`${err.response.status}:${err.response.statusText}\n${err.response.data.toString()}`)
 				}
 				throw new Error(err)
 			}
@@ -190,4 +151,4 @@ class Core {
 
 }
 
-module.exports = Core
+module.exports = DefaultApi

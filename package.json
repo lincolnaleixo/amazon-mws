@@ -2,7 +2,7 @@
   "name": "amz-mws-api",
   "version": "0.2.4",
   "description": "node.js library with cache, exponential backoff and auto retry for amazon-mws api",
-  "main": "src/core.js",
+  "main": "src/api/core.js",
   "scripts": {
     "start": "NODE_ENV=PRODUCTION node app/core.js",
     "dev": "NODE_ENV=DEVELOPMENT node app/core.js",
@@ -33,10 +33,12 @@
     "crypto": "^1.0.1",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
+    "form-data": "^3.0.0",
     "fs-extra": "^9.0.1",
     "jsonfile": "^6.0.1",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
+    "node-fetch": "^2.6.1",
     "qs": "^6.9.4",
     "url-join": "^4.0.1",
     "xml2js": "^0.4.23"

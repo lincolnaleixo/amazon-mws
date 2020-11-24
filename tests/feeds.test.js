@@ -1,6 +1,6 @@
 const jsonfile = require('jsonfile')
 const path = require('path')
-const AmazonMWS = require('../src/core.js')
+const AmazonMWS = require('../src/api/core.js')
 const testConfig = require('./config/config.test.json');
 
 (async () => {
