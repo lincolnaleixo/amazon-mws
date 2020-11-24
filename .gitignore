@@ -1,8 +1,4 @@
 .history
-.scannerwork
-.idea
-archive
-code-inspection
 node_modules
 dump
 .DS_Store
@@ -10,11 +6,8 @@ keys
 notebooks
 cache
 dump
-tests/config
-.ipynb_checkpoints
 .packages-cache
 .devcontainer
-tests/resources.json
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
 
