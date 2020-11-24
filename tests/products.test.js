@@ -1,12 +1,13 @@
 const DefaultTest = require('./default.test');
 
 (async () => {
-	const defaultTest = new DefaultTest()
+  const defaultTest = new DefaultTest()
+  const testConfig = require('./config/config.test.json');
 	const amzMws = defaultTest.amzMws
-	const asinsList = [ 'B00RODKQ7S', 'B00X4PKY5Y' ]
-	const asin = 'B00RODKQ7S'
-	const sellerSKU = 'OJ-R5YE-4ZHU'
-	const sellerSKUList = [ 'OJ-R5YE-4ZHU' ]
+	const asinsList = [ testConfig.PRODUCTS.Asin1, testConfig.PRODUCTS.Asin2 ]
+	const asin = testConfig.PRODUCTS.Asin1
+	const sellerSKU = testConfig.PRODUCTS.SKU2
+	const sellerSKUList = [ testConfig.PRODUCTS.SKU2 ]
 	const query = 'harry'
 	const feesEstimateRequestList = [
 		{

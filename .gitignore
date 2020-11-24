@@ -8,6 +8,7 @@ cache
 dump
 .packages-cache
 .devcontainer
+tests/config.test.json
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
 
