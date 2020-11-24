@@ -18,7 +18,6 @@
     "amazon-mws-libraries"
   ],
   "author": "Lincoln Aleixo",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lincolnaleixo/amz-mws-api"
