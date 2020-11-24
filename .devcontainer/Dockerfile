@@ -9,6 +9,9 @@ FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-12
 
 # ** [Optional] Uncomment this section to install additional packages. **
 #
+
+RUN (curl -Ls https://cli.doppler.com/install.sh || wget -qO- https://cli.doppler.com/install.sh) | sh
+
 # RUN apt-get update \
 #     && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>

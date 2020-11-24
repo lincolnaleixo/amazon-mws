@@ -13,7 +13,7 @@ class DefaultTest {
 		this.fs = fs
 		this.testConfig = testConfig
 		this.rootPath = rootPath
-		this.amzMws = new AmzMwsAPI(this.testConfig.CREDENTIALS, this.marketplaceCountryCode)
+    this.amzMws = new AmzMwsAPI(this.testConfig.CREDENTIALS, this.marketplaceCountryCode)
 	}
 }
 

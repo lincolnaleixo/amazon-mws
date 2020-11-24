@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const { runInThisContext } = require('vm')
 const DefaultApi = require('../api/DefaultApi')
 
 // TODO return types
@@ -55,6 +56,7 @@ class Feeds extends DefaultApi {
 			.digest('base64')
 		params.ContentMD5Value = contentHash
 		headers['Content-MD5'] = contentHash
+
 
 		const response = await this.request({
 			Action: action,
