@@ -21,7 +21,7 @@ const urljoin = require('url-join')
 const moment = require('moment')
 const axios = require('axios').default
 const domainName = 'https://mws.amazonservices.com/'
-const apiVersions = require('../resources/apiVersions')
+const apiVersions = require('../archive/resources/apiVersions')
 
 class Core {
 
